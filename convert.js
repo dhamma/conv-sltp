@@ -38,6 +38,8 @@ var replaceBJTpagenumber=function(line) {
 	});	
 	return line;
 }
+
+
 dofile=function(f){
 	console.log('processing',f)
 	filename=f;
