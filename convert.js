@@ -2,7 +2,7 @@ fs=require('fs')
 sourcefolder='html/';
 outputfolder='bookxml/';
 lst=fs.readFileSync('./sltp_html.lst','utf8').replace(/\r\n/g,'\n').split('\n');
-var filename="";
+var filename="",pagecount=0;
 var replaceEntities=function(line) { 
 	// &#7747; &#257;  assume AOT only use decimal entities
 	line=line.replace(/&#(.*?);/g,function(m) {
@@ -29,11 +29,11 @@ var replacePTSpagenumber=function(line) {
 */
 var replaceBJTpagenumber=function(line) {
 	//[BJT Page 006] [\x   6/]     
-	line=line.replace(/\[BJT Page (\d+).*?(\d+)\/\]     /g,function(m,n1,n2) {
+	line=line.replace(/\[BJT Page[:\.]? ?(\d+).*?(\d+)\/\]     /g,function(m,n1,n2) {
 		n1=parseInt(n1,10);
 		n2=parseInt(n2,10);
 		if (n1!=n2) throw 'page number not match '+n1+'!='+n2+' '+filename+'\n'+line
-
+		pagecount++;
 		return '<pb n="'+n1+'"/>';
 	});	
 	return line;
@@ -71,3 +71,4 @@ dofile=function(f){
 
 
 lst.map(function(file){dofile(file)});
+console.log('page count',pagecount)
